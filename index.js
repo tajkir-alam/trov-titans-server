@@ -42,6 +42,8 @@ async function run() {
             const limitIs = parseInt(req.query.limit)
             const categoryName = req.query.categoryname;
             const toyName = req.query.searchtoy;
+            const getEamil = req.query.email;
+            console.log(getEamil);
 
             let limit = 1000000000;
             let query = {};
@@ -56,6 +58,10 @@ async function run() {
 
             if (toyName) {
                 query = { name: { $regex: toyName, $options: 'i' } };
+            }
+
+            if (getEamil) {
+                query = { sellerEmail: getEamil }
             }
 
             const cursor = ShopByCategory.find(query).limit(limit);
