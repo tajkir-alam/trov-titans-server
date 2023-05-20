@@ -34,23 +34,30 @@ async function run() {
         await client.connect();
 
         const ShopByCategory = client.db("TrovTitans").collection("ShopByCategory");
+        const okTry = client.db("TrovTitans").collection("oktry");
 
         app.get('/shopbycategory', async (req, res) => {
             const limitIs = parseInt(req.query.limit)
             const categoryName = req.query.categoryname;
             console.log(categoryName);
             let limit = 1000000000;
-            if(limitIs){
-                limit = limitIs;   
+            if (limitIs) {
+                limit = limitIs;
             }
-            
+
             let query = {};
-            if(categoryName){
-                query = {subCategory: categoryName};
+            if (categoryName) {
+                query = { subCategory: categoryName };
                 // console.log(categoryName);
             }
 
             const cursor = ShopByCategory.find(query).limit(limit);
+            const result = await cursor.toArray();
+            res.send(result);
+        })
+
+        app.get('/oktry', async(req, res) => {
+            const cursor = okTry.find();
             const result = await cursor.toArray();
             res.send(result);
         })
@@ -73,3 +80,20 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
     console.log("Server is running on port: ", port);
 })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
