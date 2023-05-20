@@ -12,7 +12,7 @@ app.use(express.json());
 // TrovTitans
 // OlzIpl43mniy9ZDW
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = "mongodb+srv://TrovTitans:OlzIpl43mniy9ZDW@cluster0.h2ziqne.mongodb.net/?retryWrites=true&w=majority";
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -23,9 +23,9 @@ const client = new MongoClient(uri, {
         deprecationErrors: true,
     },
     // Server Auto off / can't get data error solution code
-    // useNewUrlParser: true,
-    // useUnifiedTopology: true,
-    // maxPoolSize: 10,
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    maxPoolSize: 10,
 });
 
 async function run() {
@@ -40,7 +40,7 @@ async function run() {
         const indexOptions = { name: "searchingToys" };
         const indexCreating = await ShopByCategory.createIndex(indexKeys, indexOptions);
 
-        app.get('/shopbycategory', async (req, res) => {
+        app.get('/alltoys', async (req, res) => {
 
             const limitIs = parseInt(req.query.limit)
             const categoryName = req.query.categoryname;
@@ -71,6 +71,13 @@ async function run() {
         //     const result = await cursor.toArray();
         //     res.send(result);
         // })
+
+        app.get('/toy/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) };
+            const result = await ShopByCategory.findOne(query);
+            res.send(result)
+        })
 
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
