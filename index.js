@@ -23,15 +23,15 @@ const client = new MongoClient(uri, {
         deprecationErrors: true,
     },
     // Server Auto off / can't get data error solution code
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    maxPoolSize: 10,
+    // useNewUrlParser: true,
+    // useUnifiedTopology: true,
+    // maxPoolSize: 10,
 });
 
 async function run() {
     try {
         // Connect the client to the server	(optional starting in v4.7)
-        await client.connect();
+        // await client.connect();
 
         const ShopByCategory = client.db("TrovTitans").collection("ShopByCategory");
         const okTry = client.db("TrovTitans").collection("oktry");
@@ -80,20 +80,3 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
     console.log("Server is running on port: ", port);
 })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
