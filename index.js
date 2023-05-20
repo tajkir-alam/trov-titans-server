@@ -30,25 +30,35 @@ const client = new MongoClient(uri, {
 
 async function run() {
     try {
-        // Connect the client to the server	(optional starting in v4.7)
+        // Connect the client to the server	(optional starting in v4.7) 
         // await client.connect();
 
         const ShopByCategory = client.db("TrovTitans").collection("ShopByCategory");
-        const okTry = client.db("TrovTitans").collection("oktry");
+        // const okTry = client.db("TrovTitans").collection("oktry");
+
+        const indexKeys = { name: 1 };
+        const indexOptions = { name: "searchingToys" };
+        const indexCreating = await ShopByCategory.createIndex(indexKeys, indexOptions);
 
         app.get('/shopbycategory', async (req, res) => {
+
             const limitIs = parseInt(req.query.limit)
             const categoryName = req.query.categoryname;
-            console.log(categoryName);
+            const toyName = req.query.searchtoy;
+
             let limit = 1000000000;
+            let query = {};
+
             if (limitIs) {
                 limit = limitIs;
             }
 
-            let query = {};
             if (categoryName) {
                 query = { subCategory: categoryName };
-                // console.log(categoryName);
+            }
+
+            if (toyName) {
+                query = { name: { $regex: toyName, $options: 'i' } };
             }
 
             const cursor = ShopByCategory.find(query).limit(limit);
@@ -56,11 +66,11 @@ async function run() {
             res.send(result);
         })
 
-        app.get('/oktry', async(req, res) => {
-            const cursor = okTry.find();
-            const result = await cursor.toArray();
-            res.send(result);
-        })
+        // app.get('/oktry', async(req, res) => {
+        //     const cursor = okTry.find();
+        //     const result = await cursor.toArray();
+        //     res.send(result);
+        // })
 
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
