@@ -43,10 +43,12 @@ async function run() {
             const categoryName = req.query.categoryname;
             const toyName = req.query.searchtoy;
             const getEamil = req.query.email;
-            console.log(getEamil);
+            const sortToys = req.query.sorttoys;
+            console.log(sortToys);
 
             let limit = 1000000000;
             let query = {};
+            let sortIs = {};
 
             if (limitIs) {
                 limit = limitIs;
@@ -64,7 +66,11 @@ async function run() {
                 query = { sellerEmail: getEamil }
             }
 
-            const cursor = ShopByCategory.find(query).limit(limit);
+            if (sortToys) {
+                sortIs = { price: sortToys }
+            }
+
+            const cursor = ShopByCategory.find(query).limit(limit).sort(sortIs);
             const result = await cursor.toArray();
             res.send(result);
         })
