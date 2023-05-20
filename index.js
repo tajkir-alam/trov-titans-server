@@ -21,7 +21,11 @@ const client = new MongoClient(uri, {
         version: ServerApiVersion.v1,
         strict: true,
         deprecationErrors: true,
-    }
+    },
+    // Server Auto off / can't get data error solution code
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    maxPoolSize: 10,
 });
 
 async function run() {
@@ -32,7 +36,21 @@ async function run() {
         const ShopByCategory = client.db("TrovTitans").collection("ShopByCategory");
 
         app.get('/shopbycategory', async (req, res) => {
-            const cursor = ShopByCategory.find();
+            const limitIs = parseInt(req.query.limit)
+            const categoryName = req.query.categoryname;
+            console.log(categoryName);
+            let limit = 1000000000;
+            if(limitIs){
+                limit = limitIs;   
+            }
+            
+            let query = {};
+            if(categoryName){
+                query = {subCategory: categoryName};
+                // console.log(categoryName);
+            }
+
+            const cursor = ShopByCategory.find(query).limit(limit);
             const result = await cursor.toArray();
             res.send(result);
         })
