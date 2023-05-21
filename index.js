@@ -89,7 +89,7 @@ async function run() {
         //     res.send(result);
         // })
 
-        app.get('/toy/:id', async (req, res) => {
+        app.get('/alltoys/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) };
             const result = await ShopByCategory.findOne(query);
@@ -101,6 +101,24 @@ async function run() {
             const result = await ShopByCategory.insertOne(allToys);
             res.send(result);
         })
+
+        app.put('/alltoys/:id', async (req, res) => {
+            const id = req.params.id;
+            const updatedToy = req.body;
+            const filter = { _id: new ObjectId(id) };
+            const options = { upsert: true };
+            const toy = {
+                $set: {
+                    price: updatedToy.price,
+                    quantity: updatedToy.quantity,
+                    details: updatedToy.details,
+                },
+            };
+            const result = await ShopByCategory.updateOne(filter, toy, options);
+            res.send(result);
+        })
+
+
 
         // Send a ping to confirm a successful connection
         // await client.db("admin").command({ ping: 1 });
