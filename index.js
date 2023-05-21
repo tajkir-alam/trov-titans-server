@@ -1,8 +1,8 @@
 const express = require('express');
+require('dotenv').config()
 const cors = require('cors');
 const app = express();
-const port = process.env.port || 5000;
-require('dotenv').config()
+const port = process.env.PORT || 5000;
 
 // Middleware
 // app.use(cors());
@@ -40,9 +40,11 @@ async function run() {
         const ShopByCategory = client.db("TrovTitans").collection("ShopByCategory");
         // const okTry = client.db("TrovTitans").collection("oktry");
 
-        const indexKeys = { name: 1 };
-        const indexOptions = { name: "searchingToys" };
-        const indexCreating = await ShopByCategory.createIndex(indexKeys, indexOptions);
+
+        // ------------------->>>>>> Index was did for 1 time then I turn it off.
+        // const indexKeys = { name: 1 };
+        // const indexOptions = { name: "searchingToys" };
+        // const indexCreating = await ShopByCategory.createIndex(indexKeys, indexOptions);
 
         app.get('/alltoys', async (req, res) => {
 
