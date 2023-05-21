@@ -83,12 +83,6 @@ async function run() {
             res.send(result);
         })
 
-        // app.get('/oktry', async(req, res) => {
-        //     const cursor = okTry.find();
-        //     const result = await cursor.toArray();
-        //     res.send(result);
-        // })
-
         app.get('/alltoys/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) };
@@ -138,8 +132,13 @@ async function run() {
 run().catch(console.dir);
 
 
+
 app.get('/', (req, res) => {
-    res.send('server is working')
+    const all_Toys = 'https://trov-titans-server-data.vercel.app/alltoys'
+    const single_Toy = 'https://trov-titans-server-data.vercel.app/alltoys/64684820d42658e60f48d02c'
+    // const text = 'All toys https://trov-titans-server-data.vercel.app/alltoys'
+    const text = {all_Toys, single_Toy}
+    res.send({text})
 })
 
 app.listen(port, () => {
