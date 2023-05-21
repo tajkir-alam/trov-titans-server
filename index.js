@@ -5,7 +5,14 @@ const port = process.env.port || 5000;
 require('dotenv').config()
 
 // Middleware
-app.use(cors());
+// app.use(cors());
+const corsConfig = {
+    origin: '*',
+    Credential: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE']
+}
+app.use(cors(corsConfig));
+
 app.use(express.json());
 
 
@@ -44,7 +51,6 @@ async function run() {
             const toyName = req.query.searchtoy;
             const getEamil = req.query.email;
             const sortToys = req.query.sorttoys;
-            console.log(sortToys);
 
             let limit = 1000000000;
             let query = {};
